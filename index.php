@@ -1,7 +1,6 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+session_start();
+require_once("includes/classes/mailer.php");
+echo "Hello World<br>
+    <img src='images/icon.jpg'>";
 ?>
