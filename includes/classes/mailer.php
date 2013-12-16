@@ -20,7 +20,7 @@
  * 
  * $to_justin = new mailer();
  * $to_justin->to = 'jkendall@gmail.com';
- * $to_justin->bcc = 'jkendall@gmail.com, jfekendall@gmail.com';
+ * $to_justin->bcc = 'other.address@gmail.com, some.other.address@gmail.com';
  * $to_justin->subject = 'Mailer Test';
  * $to_justin->content = 'Your html or some variable for the message goes here.';
  * $to_justin->common();
