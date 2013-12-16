@@ -1,6 +1,11 @@
 <?php
 $config = array();
 
+//User Authentication
+$config['auth_method'] = 'local'; //local, LDAP
+$config['ldap_host'] = '';//optional
+$config['ldap_port'] = '';//optional
+
 //SMTP Server Config
 $config['smtp_server'] = '';
 $config['smtp_port'] = '';
