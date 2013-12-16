@@ -1,25 +1,25 @@
 <?php
-$config = array();
+$GLOBALS = array();
 
 //User Authentication
-$config['auth_method'] = 'local'; //local, LDAP
-$config['ldap_host'] = '';//optional
-$config['ldap_port'] = '';//optional
+$GLOBALS['auth_method'] = 'local'; //local, LDAP
+$GLOBALS['ldap_host'] = '';//optional
+$GLOBALS['ldap_port'] = '';//optional
 
-//SMTP Server Config
-$config['smtp_server'] = '';
-$config['smtp_port'] = '';
-$config['smtp_default_sender'] = '';
-$config['smtp_default_password'] = '';
+//SMTP Server GLOBALS
+$GLOBALS['smtp_server'] = '';
+$GLOBALS['smtp_port'] = '';
+$GLOBALS['smtp_default_sender'] = '';
+$GLOBALS['smtp_default_password'] = '';
 
-//Database Config
-$config['db_flavor'] = 'mysqli'; //mysqli or mssql
-$config['db_database'] = 'claymore';
-$config['db_table_prefix'] = '';
-$config['db_domain_name'] = ''; //optional
-$config['db_hostname'] = '';
-$config['db_username'] = '';
-$config['db_password'] = '';
+//Database GLOBALS
+$GLOBALS['db_flavor'] = 'mysqli'; //mysqli or mssql
+$GLOBALS['db_database'] = 'claymore';
+$GLOBALS['db_table_prefix'] = '';
+$GLOBALS['db_domain_name'] = ''; //optional
+$GLOBALS['db_hostname'] = '';
+$GLOBALS['db_username'] = '';
+$GLOBALS['db_password'] = '';
 
 
 ?>
