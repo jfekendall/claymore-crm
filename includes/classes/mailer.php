@@ -9,7 +9,7 @@
  * 
  * require_once "mailer.php";
  * $to_justin = new mailer();
- * $to_justin->to = 'jkendall@nemocp.com';
+ * $to_justin->to = 'jkendall@gmail.com';
  * $to_justin->subject = 'Mailer Test';
  * $to_justin->content = "Your html or some variable for the message goes here.";
  * $to_justin->common();
@@ -19,8 +19,8 @@
  * Send to many at once via BCC:
  * 
  * $to_justin = new mailer();
- * $to_justin->to = 'jkendall@nemocp.com';
- * $to_justin->bcc = 'jkendall@nemocp.com, jfekendall@gmail.com';
+ * $to_justin->to = 'jkendall@gmail.com';
+ * $to_justin->bcc = 'jkendall@gmail.com, jfekendall@gmail.com';
  * $to_justin->subject = 'Mailer Test';
  * $to_justin->content = 'Your html or some variable for the message goes here.';
  * $to_justin->common();
