@@ -1,6 +1,9 @@
 <?php
 $GLOBALS = array();
 
+//Basics
+$GLOBALS['template'] = 'default'; //folder must be in /templates
+
 //User Authentication
 $GLOBALS['auth_method'] = 'local'; //local, ldap
 $GLOBALS['auth_expire_time'] = '3600';
