@@ -33,14 +33,13 @@ class login {
             WHERE 
                 `username` = '$this->user'
             AND
-                `password` = '$this->password'";
+                `password` = '" . hash($GLOBALS['auth_password_hash_algo'], $this->password) . "'";
+
         if (!$result = $GLOBALS['db']->query($allowed)) {
             die('users table is not configured');
         } else {
             if ($id = $result->fetch_assoc()) {
                 setcookie("claymore_user", $id['id'], time() + $GLOBALS['auth_expire_time']);
-                //future home of 'you are allowed in stuff'
-                //echo hash($GLOBALS['auth_password_hash_algo'], $this->password);
             } else {
                 echo "Username or password is incorrect"; //future home of redirect back to login with error.
             }
