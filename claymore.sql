@@ -1,8 +1,4 @@
---
 -- Database: `claymore`
---
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
