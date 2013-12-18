@@ -1,13 +1,7 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of login
- *
+ * 
  * @author justin
  */
 class login {
@@ -20,9 +14,9 @@ class login {
         $this->user = $user;
         $this->password = $password;
         if (in_array($GLOBALS['auth_method'], $supported_methods)) {
-            $this->$GLOBALS['auth_method']();
+            echo $this->$GLOBALS['auth_method']();
         } else {
-            die("Your auth_method value is not supported");
+           echo  "Your auth_method value is not supported";
         }
     }
 
@@ -41,7 +35,7 @@ class login {
             if ($id = $result->fetch_assoc()) {
                 setcookie("claymore_user", $id['id'], time() + $GLOBALS['auth_expire_time']);
             } else {
-                echo "Username or password is incorrect"; //future home of redirect back to login with error.
+                $GLOBALS['errors'] .= "Username or password is incorrect"; //future home of redirect back to login with error.
             }
         }
     }

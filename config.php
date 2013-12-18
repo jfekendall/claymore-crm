@@ -3,6 +3,7 @@ $GLOBALS = array();
 
 //Basics
 $GLOBALS['template'] = 'default'; //folder must be in /templates
+$GLOBALS['errors'] = '';
 
 //User Authentication
 $GLOBALS['auth_method'] = 'local'; //local, ldap

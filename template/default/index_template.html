@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{site_name}</title>
+        <title>{title}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="includes/bootstrap/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="includes/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="template/{template}/style.css">
     </head>
     <body>
+        <div class="nav">
+            <img class="icon" src='template/{template}/images/icon.png'>
+        </div>
+        {errors}
         {stuff}
+        <div class='copyright'>{copyright}</div>
     </body>
 </html>

@@ -1,0 +1,39 @@
+/* 
+    Document   : style
+    Created on : Dec 17, 2013, 6:40:35 PM
+    Author     : justin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html, body { 
+    width: 100%;
+    margin: 0;
+    background: #202020;
+    color:#a1a1a1;
+}
+
+.nav{
+    float:left;
+    min-height:100%;
+    width:20%;
+    text-align:center;
+    border-right: 2px solid #c0c0c0;
+}
+
+.nav .icon{
+    width:60px;
+}
+
+.alert{
+    float:left;
+    width:80%;
+}
+
+.copyright{
+    width:100%;
+    position:absolute;
+    bottom:0;
+    text-align:center;
+    font-size: 8pt;
+}
