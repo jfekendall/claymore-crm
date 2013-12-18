@@ -23,7 +23,11 @@ require_once("includes/classes/mailer.php");
 //Some placeholder stuff to make sure nothing died in initialization
 require_once("includes/classes/template.php");
 
-if(!empty($GLOBALS['errors'])){
+require_once("includes/classes/navigation.php");
+$nav = new navigation();
+$nav = $nav->nav();
+
+if (!empty($GLOBALS['errors'])) {
     $GLOBALS['errors'] = "<div class='alert alert-danger'>{$GLOBALS['errors']}</div>";
 }
 
@@ -32,7 +36,9 @@ $replace = array(
     'title' => 'Claymore CRM',
     'template' => 'default',
     'copyright' => 'Proudly Powered by Claymore CRM',
-    'errors' => $GLOBALS['errors']
-    );
+    'errors' => $GLOBALS['errors'],
+    'nav' => $nav,
+    'base_url' => 'http://claymoretest.com/'
+);
 echo $out->out($replace);
 ?>

@@ -11,3 +11,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=innodb DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+--
+-- Table structure for table `modules`
+--
+CREATE TABLE IF NOT EXISTS `modules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mod_name` varchar(20) NOT NULL,
+  `mod_nav_order` tinyint(2) NOT NULL DEFAULT '0',
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

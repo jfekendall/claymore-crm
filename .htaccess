@@ -1,0 +1,13 @@
+<IfModule mod_mime.c>
+    AddType application/font-woff                       woff
+    AddType application/vnd.ms-fontobject               eot
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteOptions inherit
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([a-z_]+)/(.*)$ index.php?section=$1&action=$2 [NC,L]
+    RewriteRule ^([a-z_]+)$ index.php?section=$1
+    
+</IfModule>
