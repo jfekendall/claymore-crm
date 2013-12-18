@@ -10,13 +10,11 @@
  *
  * @author justin
  */
-class navigation {
+class navigation extends modules{
     
     public function nav(){
-        require_once("modules.php");
-        $mods = new modules();
-        $installed = $mods->installed();
-        $enabled = $mods->enabled();
+        $installed = parent::installed();
+        $enabled = parent::enabled();
         $rs = '';
         foreach($enabled as $en){
             $rs .= "<li>
