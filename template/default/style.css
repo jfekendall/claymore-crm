@@ -11,6 +11,38 @@ html, body {
     color:#a1a1a1;
 }
 
+/*
+Login
+*/
+.login_header{
+    text-align:center;
+}
+
+.login_header .icon{
+    width:100px;
+}
+
+.login_header table{
+    width:300px;
+    margin:auto;
+    margin-top:200px;
+    background:#808080;
+    border-radius: 5px;
+}
+
+.login_header table th{
+    color:black;
+    font-weight:normal;
+    padding-left:10px;
+}
+
+.login_header .submit_row{
+    text-align:center;
+}
+/*
+Nav
+*/
+
 .nav{
     width:100%;
     text-align:center;
