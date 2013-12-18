@@ -5,16 +5,25 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="{base_url}includes/bootstrap/js/bootstrap.js"></script>
+        <script src="{base_url}includes/js/scripts.js"></script>
         <link rel="stylesheet" href="{base_url}includes/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="{base_url}template/{template}/style.css">
     </head>
     <body>
-        <div class="nav navbar">
-            <img class="icon" src='{base_url}template/{template}/images/icon.png'>
-            {nav}
+        <div class='row'>
+            <div class='col-xs-2 col-lg-2 col-md-2 col-sm-2'>
+                <div class="nav">
+                    <li><a href='{base_url}'><img class="icon" src='{base_url}template/{template}/images/icon.png'></a></li>
+                    {nav}
+                </div>
+            </div>
+            <div class='col-xs-8 col-lg-8 col-md-8 col-sm-8'>
+                {errors}
+                {stuff}
+            </div>
         </div>
-        {errors}
-        {stuff}
-        <div class='copyright'>{copyright}</div>
+        <div class='row col-xs-pull-12'>
+            <div class='copyright'>{copyright}</div>
+        </div>
     </body>
 </html>
