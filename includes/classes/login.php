@@ -16,7 +16,7 @@ class login {
         if (in_array($GLOBALS['auth_method'], $supported_methods)) {
             echo $this->$GLOBALS['auth_method']();
         } else {
-           echo  "Your auth_method value is not supported";
+            echo "Your auth_method value is not supported";
         }
     }
 
@@ -32,8 +32,11 @@ class login {
         if (!$result = $GLOBALS['db']->query($allowed)) {
             die('users table is not configured');
         } else {
-            if ($id = $result->fetch_assoc()) {
-                setcookie("claymore_user", $id['id'], time() + $GLOBALS['auth_expire_time']);
+            if ($id = $result->num_rows) {
+                if ($id = $result->fetch_assoc()) {
+                    setcookie("claymore_user", $id['id'], time() + $GLOBALS['auth_expire_time']);
+                    header("Location: .");
+                }
             } else {
                 $GLOBALS['errors'] .= "Username or password is incorrect"; //future home of redirect back to login with error.
             }
