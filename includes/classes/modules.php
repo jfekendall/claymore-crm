@@ -1,12 +1,5 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of modules
  *
  * @author justin
  */
@@ -31,7 +24,7 @@ class modules {
 
     public function enabled() {
         $enabled = array();
-        foreach ($this->installed AS $inst) {
+        foreach ($this->installed() AS $inst) {
             if ($inst == 'Core') {
                 if ($core_mods = opendir('./includes/modules/Core')) {
                     while (false !== ($mod = readdir($core_mods))) {

@@ -11,21 +11,22 @@
     <body>
         <div class='row'>
             <div class='col-xs-12 col-lg-12 col-md-12 col-sm-12 login_header' >
-                
+
                 <form action="{base_url}/login" method="POST">
                     <table>
                         <tr>
                             <td colspan="2" class="submit_row">
                                 <img class="icon" src='{base_url}/template/{template}/images/icon.png'>
+                                {errors}
                             </td>
                         </tr>
                         <tr>
                             <th>User Name</th>
-                            <td><input type="text" name="username" placeholder="User Name"></td>
+                            <td><input type="text" name="username" placeholder="User Name" required></td>
                         </tr>
                         <tr>
                             <th>Password</th>
-                            <td><input type="password" name="password"></td>
+                            <td><input type="password" name="password" required></td>
                         </tr>
                         <tr>
                             <td colspan="2" class="submit_row">
