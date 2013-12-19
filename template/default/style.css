@@ -5,6 +5,8 @@
 */
 
 html, body { 
+    font-family: 'Titillium Web', sans-serif;
+    font-weight:normal;
     max-width: 99%;
     margin: 0;
     background: #202020;

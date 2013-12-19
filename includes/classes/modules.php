@@ -35,10 +35,10 @@ class modules {
                     closedir($core_mods);
                 }
             } else {
-                $exists_q = $GLOBALS['db']->query("SELECT id FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
+                $exists_q = $GLOBALS['db']->query("SELECT id FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst' ORDER BY mod_nav_order");
                 $is_registered = current($exists_q->fetch_row());
-                if(!empty($is_registered)){
-                    
+                if(!empty($is_registered) && $is_registered == 1){
+                    $enabled[] = $inst;
                 }else{
                     $GLOBALS['db']->query("INSERT INTO {$GLOBALS['db_table_prefix']}modules (mod_name) VALUES ('$inst')");
                 }

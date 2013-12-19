@@ -20,9 +20,6 @@ require_once("includes/classes/modules.php");
 require_once("includes/classes/traffic_cop.php");
 $verdict = new traffic_cop();
 
-//print_r($verdict->return);
-
-
 require_once("includes/classes/navigation.php");
 $nav = new navigation();
 $nav = $nav->nav();

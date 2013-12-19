@@ -7,7 +7,6 @@
 class navigation extends modules{
     
     public function nav(){
-        $installed = parent::installed();
         $enabled = parent::enabled();
         $rs = '';
         foreach($enabled as $en){
