@@ -19,28 +19,30 @@ if (!empty($GLOBALS['db_flavor']) && !empty($GLOBALS['db_hostname'])) { //Assume
 require_once("includes/classes/modules.php");
 require_once("includes/classes/traffic_cop.php");
 $verdict = new traffic_cop();
-
+if (!empty($verdict->return['module'])) {
+    require_once("includes/modules/{$verdict->return['module']}");
+    $class = current(explode('.', end(explode('/', $verdict->return['module']))));
+    $module = new $class();
+    $out = $module->out();
+    foreach(array_keys($out) AS $replacement){
+        $replace[$replacement] = $out[$replacement];
+    }
+}
 require_once("includes/classes/navigation.php");
 $nav = new navigation();
-$nav = $nav->nav();
+
 
 if (!empty($GLOBALS['errors'])) {
     $GLOBALS['errors'] = "<div class='alert alert-danger'>{$GLOBALS['errors']}</div>";
 }
 
-if(file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$GLOBALS['template']}/{$verdict->return['template']}")){
- $out = new template($verdict->return['template']);   
-}else{
+if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$GLOBALS['template']}/{$verdict->return['template']}")) {
+    $out = new template($verdict->return['template']);
+} else {
     $out = new template('index_template.html');
 }
+$replace['nav'] = $nav->nav();
+$replace['errors'] = $GLOBALS['errors'];
 
-$replace = array(
-    'title' => 'Claymore CRM',
-    'template' => 'default',
-    'copyright' => 'Proudly Powered by Claymore CRM',
-    'errors' => $GLOBALS['errors'],
-    'nav' => $nav,
-    'base_url' => 'http://claymoretest.com'
-);
 echo $out->out($replace);
 ?>

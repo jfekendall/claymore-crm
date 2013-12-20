@@ -13,6 +13,12 @@ html, body {
     color:#a1a1a1;
 }
 
+.glyphicon-ok{
+    color:green;
+}
+.glyphicon-remove{
+    color:red;
+}
 /*
 Login
 */
@@ -86,4 +92,18 @@ Nav
     bottom:0;
     text-align:center;
     font-size: 8pt;
+}
+
+.table>tbody>tr>.mm_sub_modules{
+    font-style:italic;
+    border-top: 0;
+}
+.table>tbody>tr>.mm_module_name{
+    font-size:1.5em;
+    width: 20%;
+}
+
+.mm_has_template{
+    font-size:1em;
+    text-align:center;
 }

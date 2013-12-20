@@ -27,5 +27,11 @@ $GLOBALS['db_hostname'] = 'localhost';
 $GLOBALS['db_username'] = 'root';
 $GLOBALS['db_password'] = 'asdf'; //It's the dev machine. Don't judge me *cries in a corner*
 
+$replace = array(
+    'title' => 'Claymore CRM',
+    'template' => 'default',
+    'copyright' => 'Proudly Powered by Claymore CRM',
+    'base_url' => 'http://claymoretest.com'
+);
 
 ?>

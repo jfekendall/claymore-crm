@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author justin
@@ -24,22 +25,33 @@ class modules {
 
     public function enabled() {
         $enabled = array();
+        $counter = 0;
         foreach ($this->installed() AS $inst) {
-            if ($inst == 'Core') {
-                if ($core_mods = opendir('./includes/modules/Core')) {
+            if ($inst == 'core') {
+                if ($core_mods = opendir('./includes/modules/core')) {
                     while (false !== ($mod = readdir($core_mods))) {
                         if (stristr($mod, '.php')) {
-                            $enabled[] = $mod;
+                            $enabled[$mod] = array(
+                                'dir' => 'core'
+                            );
+                            $counter++;
                         }
                     }
                     closedir($core_mods);
                 }
             } else {
-                $exists_q = $GLOBALS['db']->query("SELECT id FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst' ORDER BY mod_nav_order");
+                $exists_q = $GLOBALS['db']->query("SELECT count(id) FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
                 $is_registered = current($exists_q->fetch_row());
-                if(!empty($is_registered) && $is_registered == 1){
-                    $enabled[] = $inst;
-                }else{
+                if (!empty($is_registered) && $is_registered == 1) {
+                    $mod_enabled = $GLOBALS['db']->query("SELECT enabled FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
+
+                    if (current($mod_enabled->fetch_row()) == 1) {
+                        $enabled[$inst] = array(
+                            'dir' => $inst
+                        );
+                        $counter++;
+                    }
+                } else {
                     $GLOBALS['db']->query("INSERT INTO {$GLOBALS['db_table_prefix']}modules (mod_name) VALUES ('$inst')");
                 }
             }
