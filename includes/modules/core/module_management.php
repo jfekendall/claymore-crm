@@ -25,46 +25,27 @@ class module_management extends modules {
         $ia = array();
         $ea = array();
         $counter = 1;
-        foreach (parent::installed() AS $ins) {
-            $ia[$ins] = "$ins";
-            $counter++;
-        }
-
         $enabled = parent::enabled();
-        foreach (array_keys($enabled) AS $en) {
-            $ea[$enabled[$en]['dir']][$counter] = $en;
-            unset($ia[$enabled[$en]['dir']]);
-            $counter++;
-        }
-        $counter = 0;
-        foreach (array_keys($ea) AS $en) {
-            $this->outArray[$counter][0] = $en; //Module Name
-            $this->outArray[$counter][1] = 1; //Is enabled
-            foreach ($ea[$en] AS $sub) {
-                $this->outArray[$counter][2][] = $sub;
-                $name = current(explode('.', $sub));
-                
-                if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$GLOBALS['template']}/{$name}_template.html")) {
-                    $this->outArray[$counter][3][] = 1;
-                } else {
-                    $this->outArray[$counter][3][] = 0;
-                }
-            }
-            asort($this->outArray[$counter][2]);
-            //Determine whether it's removable or not.
-            if ($en == 'core') {
-                $this->outArray[$counter][4] = 0;
+        $installed = parent::installed();
+        foreach (array_keys($enabled) AS $mod) {
+            $this->outArray[$counter][0] = $mod; //Module Name
+            $this->outArray[$counter][1] = $enabled[$mod]['enabled']; //Enabled
+            $this->outArray[$counter][2] = $enabled[$mod]['feature']; //Features Array
+            if ($mod == 'core') {
+                $this->outArray[$counter][3] = 0; //Can Be Disabled
             } else {
-                $this->outArray[$counter][4] = 1;
+                $this->outArray[$counter][3] = 1; //Can Be Disabled
             }
-
+            $this->outArray[$counter][4] = $enabled[$mod]['mod_nav_order']; //Nav Order
+            unset($installed[$mod]); //Make sure it doesn't show up twice
             $counter++;
         }
 
-        foreach (array_keys($ia) AS $dis) {
-            $this->outArray[$counter][0] = $dis; //Module Name
-            $this->outArray[$counter][1] = 0; //Is disabled
-            $this->outArray[$counter][4] = 1;
+        foreach (array_keys($installed) AS $mod) {
+            $this->outArray[$counter][0] = $mod; //Module Name
+            $this->outArray[$counter][1] = 0; //Enhabled
+            $this->outArray[$counter][2] = $installed[$mod]['feature']; //Features Array
+            $this->outArray[$counter][3] = 1; //Can Be Disabled
             $counter++;
         }
         $this->formatForList();
@@ -77,18 +58,24 @@ class module_management extends modules {
                 <th class='mm_module_name'>" . ucwords($row[0]) . "</th>
                 <td></td>
                 <td  class='mm_has_template'>
-                    <input type='checkbox' ".($row[1] ? 'checked' : '')." ".($row[4] == 1 ? '' : 'disabled')." class='enableModule' id='{$row[0]}'>
+                    <input type='checkbox' " . ($row[1] ? 'checked' : '') . " " . ($row[3] == 1 ? '' : 'disabled') . " class='enableModule' id='{$row[0]}'>
                 </td>
-                <td></td>
+                <td class='mm_has_template'> " . (!empty($row[4]) ? $row[4] : '0') . "</td>
+                <td class='mm_has_template'>";
+            if ($row[3]) {
+                $rs .= "<button class='btn bnt-primary'>Remove</button>";
+            }
+            $rs .= "</td>
             </tr>";
             if (isset($row[2])) {
-                foreach (array_keys($row[2]) AS $sub) {
+                foreach ($row[2] AS $sub) {
+                    $name = current(explode('.', $sub));
                     $rs .= "<tr>
                     <td class='mm_sub_modules'>" .
-                            ucwords(str_replace('_', ' ', current(explode('.', $row[2][$sub])))) . "
+                            ucwords(str_replace('_', ' ', $name)) . "
                     </td>
                     <td class='mm_sub_modules mm_has_template'>";
-                    if ($row[3][$sub]) {
+                    if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$GLOBALS['template']}/{$name}_template.html")) {
                         $rs .= "<i class='glyphicon glyphicon-ok'></i>";
                     } else {
                         $rs .="<i class='glyphicon glyphicon-remove'></i>";

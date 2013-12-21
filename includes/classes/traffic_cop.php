@@ -20,7 +20,7 @@ class traffic_cop extends modules {
         /*
          * Check Authentication Credentials
          */
-        
+
         if (!$this->check_id()) {
             //GO TO JAIL!
             $this->return['template'] = 'login_template.html';
@@ -28,18 +28,20 @@ class traffic_cop extends modules {
         } else {
             //Good to go 
             $this->return['template'] = "{$this->section}_template.html";
-           // setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $GLOBALS['auth_expire_time']);
+            setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $GLOBALS['auth_expire_time']);
         }
-        $enabled = parent::enabled();
-        if (in_array(str_replace(' ', '_', $this->section), array_keys($enabled))) {
-            $this->return['module'] = $enabled[str_replace(' ', '_', $this->section)]['dir'] . '/' . str_replace(' ', '_', $this->section) . '.php';
-        } else if (in_array(str_replace(' ', '_', $this->section) . '.php', array_keys($enabled))) {
-            $this->return['module'] = $enabled[str_replace(' ', '_', $this->section) . '.php']['dir'] . '/' . str_replace(' ', '_', $this->section) . '.php';
-        }
-
         /*
-         * TODO: Routing for modules
+         * Routing for modules
          */
+        $enabled = parent::enabled();
+        foreach (array_keys($enabled) AS $en) {
+            foreach ($enabled[$en]['feature'] AS $feature) {
+                if (strstr($feature, $this->section)) {
+                    $this->return['module'] = "$en/$feature";
+                    break;
+                }
+            }
+        }
     }
 
     private function check_id() {

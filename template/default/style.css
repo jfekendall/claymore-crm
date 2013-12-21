@@ -54,6 +54,7 @@ Nav
 .nav{
     width:100%;
     text-align:center;
+    background: #808080;
 }
 
 .nav .icon{
@@ -65,12 +66,10 @@ Nav
     margin:0
 }
 
-.nav li{
+.nav li, .dropdown-menu li{
     text-align:center;
     margin:0;
     width:100%;
-    background: #808080;
-    border-top: 1px solid #202020;
 }
 
 .nav li a{
@@ -80,6 +79,15 @@ Nav
 .nav li a:hover{
     color: black;
 }
+
+.dropdown-menu li a{
+    color:black;
+}
+
+.dropdown-menu{
+    width:100%;
+}
+
 
 .alert{
     float:left;
