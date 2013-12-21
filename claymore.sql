@@ -19,5 +19,9 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `mod_name` varchar(20) NOT NULL,
   `mod_nav_order` tinyint(2) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `hide_in_nav` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=innodb  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+INSERT INTO `modules` (`id`, `mod_name`, `mod_nav_order`, `enabled`, `hide_in_nav`) VALUES
+(1, 'core', 100, 1, 0);
