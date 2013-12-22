@@ -13,9 +13,9 @@ $errors = $out = '';
 require_once("includes/classes/template.php");
 
 //Set Globals from config file
-//if (file_exists('config.php') && !empty($GLOBALS['db_hostname'])) {
+if (file_exists('config.php') && !empty($GLOBALS['db_hostname'])) {
     require_once("config.php");
-/*} else {
+} else if (empty($GLOBALS['db_hostname'])){
     $replace = array();
     $GLOBALS['base_url'] = $replace['base_url'] = $base_url;
     $GLOBALS['template'] = $replace['template'] = 'default';
@@ -29,7 +29,7 @@ require_once("includes/classes/template.php");
     $out = new template('setup_template.html');
     echo $out->out($replace);
     die();
-}*/
+}
 //Connect to a database if it is configured
 if (!empty($GLOBALS['db_flavor']) && !empty($GLOBALS['db_hostname'])) { //Assume the rest is GLOBALSured and go for it
     require_once("includes/db/{$GLOBALS['db_flavor']}.php");

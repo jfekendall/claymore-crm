@@ -46,7 +46,7 @@ class dependancies {
         
         if (is_writable("{$_SERVER['DOCUMENT_ROOT']}/config.php")) {
             return true;
-        }else if(file_put_contents("{$_SERVER['DOCUMENT_ROOT']}/config.php" , '')){
+        }else if(file_put_contents("{$_SERVER['DOCUMENT_ROOT']}/config.php" , "<?php\n\$GLOBALS = array();\n\$globals['errors']='';")){
             return true;
         }
         return false;
