@@ -9,8 +9,6 @@ html, body {
     font-weight:normal;
     max-width: 99%;
     margin: 0;
-    background: #202020;
-    color:#a1a1a1;
 }
 
 .glyphicon-ok{
@@ -53,8 +51,6 @@ Nav
 
 .nav{
     width:100%;
-    
-    background: #808080;
 }
 
 .nav .icon{
@@ -73,7 +69,7 @@ Nav
 }
 
 .nav li a{
-    color: white;
+
 }
 
 .nav li a:hover{
@@ -123,7 +119,7 @@ Nav
     width:700px;
     margin:auto;
     margin-top:50px;
-    background:#808080;
+   
     border-radius: 5px;
 }
 

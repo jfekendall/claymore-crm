@@ -13,9 +13,10 @@ $errors = $out = '';
 require_once("includes/classes/template.php");
 
 //Set Globals from config file
-if (file_exists('config.php') && !empty($GLOBALS['db_hostname'])) {
+if (file_exists('config.php')) {
     require_once("config.php");
-} else if (empty($GLOBALS['db_hostname'])){
+}
+if (empty($GLOBALS['db_hostname'])) {
     $replace = array();
     $GLOBALS['base_url'] = $replace['base_url'] = $base_url;
     $GLOBALS['template'] = $replace['template'] = 'default';
@@ -30,22 +31,29 @@ if (file_exists('config.php') && !empty($GLOBALS['db_hostname'])) {
     echo $out->out($replace);
     die();
 }
+
 //Connect to a database if it is configured
 if (!empty($GLOBALS['db_flavor']) && !empty($GLOBALS['db_hostname'])) { //Assume the rest is GLOBALSured and go for it
     require_once("includes/db/{$GLOBALS['db_flavor']}.php");
 } else {
-    die("Configure a database to continue"); //Coming soon! Initialization of the setup script!
+    die("Configure a database to continue");
 }
+
 require_once("includes/classes/modules.php");
 require_once("includes/classes/traffic_cop.php");
+
 $verdict = new traffic_cop();
 if (!empty($verdict->return['module'])) {
-    require_once("includes/modules/{$verdict->return['module']}");
-    $class = current(explode('.', end(explode('/', $verdict->return['module']))));
-    $module = new $class();
-    $out = $module->out();
-    foreach (array_keys($out) AS $replacement) {
-        $replace[$replacement] = $out[$replacement];
+    if (current(explode('.', end(explode('/', $verdict->return['module'])))) == 'login') {
+        echo 'wieners';
+    } else {
+        require_once("includes/modules/{$verdict->return['module']}");
+        $class = current(explode('.', end(explode('/', $verdict->return['module']))));
+        $module = new $class();
+        $out = $module->out();
+        foreach (array_keys($out) AS $replacement) {
+            $replace[$replacement] = $out[$replacement];
+        }
     }
 }
 require_once("includes/classes/navigation.php");

@@ -1,6 +1,0 @@
-<?php
-
-/*
- * Login dummy class
- */
-?>

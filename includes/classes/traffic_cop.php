@@ -24,7 +24,7 @@ class traffic_cop extends modules {
         if (!$this->check_id()) {
             //GO TO JAIL!
             $this->return['template'] = 'login_template.html';
-            return;
+            return $this->return;
         } else {
             //Good to go 
             $this->return['template'] = "{$this->section}_template.html";
