@@ -27,6 +27,23 @@ $(document).ready(function() {
         $('.alert-success').slideToggle('fast');
 
     });
+    
+    $('.removeModule').click(function(){
+        var module = this.id;
+        var blah = $.ajax({
+            url: this_location + "/includes/js/ajax/module_management.php?action=removeModule&module=" + module,
+            async: false
+        }).responseText;
+        location.reload();
+    });
+    
+    $('.changeNavOrder').change(function(){
+        var number = this.value;
+        var module = this.id;
+        $.ajax({
+            url: this_location + "/includes/js/ajax/module_management.php?action=changeNavOrder&mod_nav_order=" + number + "&module=" + module
+        });
+    });
 });
 
 

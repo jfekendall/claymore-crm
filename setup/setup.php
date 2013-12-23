@@ -169,11 +169,11 @@ class setup {
             $config_file_contents .= "\$GLOBALS['$config'] = '{$_POST[$config]}';\n";
         }
         $config_file_contents .= "\$replace = array(\n
-    'title' => '{$_POST['title']}',\n
-    'template' => 'default',\n
-    'copyright' => 'Proudly Powered by Claymore CRM',\n
-    'base_url' => '{$_POST['base_url']}'\n
-);\n?>";
+            'title' => '{$_POST['title']}',\n
+            'template' => 'default',\n
+            'copyright' => 'Proudly Powered by Claymore CRM',\n
+            'base_url' => '{$_POST['base_url']}'\n
+        );\n?>";
 
         file_put_contents("{$_SERVER['DOCUMENT_ROOT']}/config.php", $config_file_contents, FILE_APPEND);
         //chmod("{$_SERVER['DOCUMENT_ROOT']}/config.php", 0555);

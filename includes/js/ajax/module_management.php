@@ -1,4 +1,5 @@
 <?php
+
 //error_reporting(E_ALL);
 //ini_set('display_errors', '1');
 include("{$_SERVER['DOCUMENT_ROOT']}/config.php");
@@ -10,12 +11,15 @@ switch ($_GET['action']) {
     case "enableModule":
         enableModule();
         break;
+    case "removeModule":
+        removeModule();
+        break;
     case "changeNavOrder":
         changeNavOrder();
         break;
 }
 
-function changeNavOrder(){
+function changeNavOrder() {
     $db_flavor = "{$GLOBALS['db_flavor']}_query";
     $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
     SET 
@@ -31,9 +35,23 @@ function enableModule() {
     } else {
         $bit = 1;
     }
-  $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
+    $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
     SET 
         enabled=$bit 
+    WHERE 
+        mod_name='{$_GET['module']}'");
+}
+
+function removeModule() {
+    $db_flavor = "{$GLOBALS['db_flavor']}_query";
+    $manifest = explode("\n", file_get_contents("{$_SERVER['DOCUMENT_ROOT']}/includes/modules/{$_GET['module']}/manifest"));
+    foreach ($manifest AS $file) {
+        if(!unlink("{$_SERVER['DOCUMENT_ROOT']}/$file")){
+            die("Permissions aren't right on {$_SERVER['DOCUMENT_ROOT']}/$file");
+        }
+    }
+    rmdir("{$_SERVER['DOCUMENT_ROOT']}/includes/modules/{$_GET['module']}");
+    $db_flavor($GLOBALS['db'], "DELETE FROM {$GLOBALS['db_table_prefix']}modules 
     WHERE 
         mod_name='{$_GET['module']}'");
 }

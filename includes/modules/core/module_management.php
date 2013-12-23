@@ -55,15 +55,15 @@ class module_management extends modules {
         $rs = '';
         foreach ($this->outArray AS $row) {
             $rs .= "<tr>
-                <th class='mm_module_name'>" . ucwords($row[0]) . "</th>
+                <th class='mm_module_name'>" . ucwords(str_replace('_', ' ', $row[0])) . "</th>
                 <td></td>
                 <td  class='mm_has_template'>
                     <input type='checkbox' " . ($row[1] ? 'checked' : '') . " " . ($row[3] == 1 ? '' : 'disabled') . " class='enableModule' id='{$row[0]}'>
                 </td>
-                <td class='mm_has_template'> " . (!empty($row[4]) ? $row[4] : '0') . "</td>
+                <td class='mm_has_template'> <input type='number' class='changeNavOrder' value='" . (!empty($row[4]) ? $row[4] : '0') . "' min=0 max=100 id='{$row[0]}'></td>
                 <td class='mm_has_template'>";
             if ($row[3]) {
-                $rs .= "<button class='btn bnt-primary'>Remove</button>";
+                $rs .= "<button class='btn bnt-primary removeModule' id='{$row[0]}'>Remove</button>";
             }
             $rs .= "</td>
             </tr>";

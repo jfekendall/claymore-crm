@@ -44,16 +44,12 @@ require_once("includes/classes/traffic_cop.php");
 
 $verdict = new traffic_cop();
 if (!empty($verdict->return['module'])) {
-    if (current(explode('.', end(explode('/', $verdict->return['module'])))) == 'login') {
-        echo 'wieners';
-    } else {
-        require_once("includes/modules/{$verdict->return['module']}");
-        $class = current(explode('.', end(explode('/', $verdict->return['module']))));
-        $module = new $class();
-        $out = $module->out();
-        foreach (array_keys($out) AS $replacement) {
-            $replace[$replacement] = $out[$replacement];
-        }
+    require_once("includes/modules/{$verdict->return['module']}");
+    $class = current(explode('.', end(explode('/', $verdict->return['module']))));
+    $module = new $class();
+    $out = $module->out();
+    foreach (array_keys($out) AS $replacement) {
+        $replace[$replacement] = $out[$replacement];
     }
 }
 require_once("includes/classes/navigation.php");
