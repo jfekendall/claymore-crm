@@ -45,9 +45,7 @@ class traffic_cop extends modules {
     }
 
     private function check_id() {
-        if (!isset($_COOKIE['claymore_user']) && $this->section != 'login') {
-            return false; //go to jail
-        } else if (!isset($_COOKIE['claymore_user']) && $this->section == 'login' && isset($_POST['username'])) {
+        if (!isset($_COOKIE['claymore_user']) && isset($_POST['username'])) {
             require_once("login.php");
             new login($_POST['username'], $_POST['password']);
             if (isset($_COOKIE['claymore_user'])) {
@@ -55,6 +53,8 @@ class traffic_cop extends modules {
             } else {
                 return false; //go to jail
             }
+        }else if (!isset($_COOKIE['claymore_user']) && $this->section != 'login') {
+            return false; //go to jail
         } else if ($this->section == 'login' && !isset($_COOKIE['claymore_user'])) {
             return false; //go to jail
         } else {

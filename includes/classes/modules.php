@@ -56,7 +56,7 @@ class modules {
             $is_registered = current($exists_q->fetch_row());
             if (!empty($is_registered) && $is_registered == 1) {
 
-                $mod_enabled = $GLOBALS['db']->query("SELECT enabled, mod_nav_order, hide_in_nav FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst' ORDER BY mod_nav_order");
+                $mod_enabled = $GLOBALS['db']->query("SELECT enabled, mod_nav_order, hide_in_nav FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
                 $mod_info = $mod_enabled->fetch_assoc();
 
                     $enabled[$inst]['enabled'] = $mod_info['enabled'];

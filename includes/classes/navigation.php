@@ -8,38 +8,37 @@
 class navigation extends modules {
 
     public function nav() {
-        $enabled = parent::enabled();
+        $mods_enabled_info = parent::enabled();
+        $enabled = $GLOBALS['db']->query("SELECT * FROM {$GLOBALS['db_table_prefix']}modules WHERE enabled=1 ORDER BY mod_nav_order");
         $rs = '';
-        foreach (array_keys($enabled) as $en) {
-            if ($enabled[$en]['enabled'] == 1) {
-                if (sizeof($enabled[$en]['feature']) == 1) {
-                    $rs .= "<li>
-                <a href='" . strtolower(current(explode('.php', $en))) . "'>
-                    " . ucwords(str_replace('_', ' ', current(explode('.php', $en)))) . "
+        while ($en = $enabled->fetch_assoc()) {
+            if (sizeof($mods_enabled_info[$en['mod_name']]['feature']) == 1) {
+                $rs .= "<li>
+                <a href='" . strtolower($en['mod_name']) . "'>
+                    " . ucwords(str_replace('_', ' ', $en['mod_name'])) . "
                 </a></li>";
-                } else {
-                    $rs .= "<li class='dropdown'>
+            } else {
+                $rs .= "<li class='dropdown'>
                 <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
                 <span class='caret'></span>";
-                    if ($en == 'core') {
-                        $rs .= 'Options';
-                    } else {
-                        $rs .= ucwords($en);
-                    }
-                    $rs .= "</a>
+                if ($en == 'core') {
+                    $rs .= 'Options';
+                } else {
+                    $rs .= ucwords($en['mod_name']);
+                }
+                $rs .= "</a>
                     <ul class='dropdown-menu'>";
-                    foreach ($enabled[$en]['feature'] AS $feature) {
-                        if ($feature != 'login.php') {
-                            $rs .= "<li>
+                foreach ($mods_enabled_info[$en['mod_name']]['feature'] AS $feature) {
+                    if ($feature != 'login.php') {
+                        $rs .= "<li>
                                 <a href='" . strtolower(current(explode('.php', $feature))) . "'>
                                     " . ucwords(str_replace('_', ' ', current(explode('.php', $feature)))) . "
                                 </a>
                             </li>";
-                        }
                     }
-                    $rs .= "</ul>
-                </li>";
                 }
+                $rs .= "</ul>
+                </li>";
             }
         }
         return $rs;
