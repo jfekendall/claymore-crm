@@ -10,6 +10,18 @@ switch ($_GET['action']) {
     case "enableModule":
         enableModule();
         break;
+    case "changeNavOrder":
+        changeNavOrder();
+        break;
+}
+
+function changeNavOrder(){
+    $db_flavor = "{$GLOBALS['db_flavor']}_query";
+    $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
+    SET 
+        mod_nav_order='{$_GET['mod_nav_order']}'
+    WHERE 
+        mod_name='{$_GET['module']}'");
 }
 
 function enableModule() {
