@@ -159,3 +159,15 @@ color: white;
     color:#020202;
     padding:10px;
 }
+
+/*
+* Clients
+*/
+
+.clientAddForm, .clientSetup, .clientList{
+    display:none;
+}
+
+.clientSetupForm{
+    display:none;
+}

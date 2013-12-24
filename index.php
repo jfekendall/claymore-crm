@@ -54,7 +54,6 @@ if (!empty($verdict->return['module'])) {
 }
 require_once("includes/classes/navigation.php");
 $nav = new navigation();
-
 if (!empty($GLOBALS['errors'])) {
     $GLOBALS['errors'] = "<div class='alert alert-danger'>{$GLOBALS['errors']}</div>";
 }

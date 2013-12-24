@@ -28,8 +28,9 @@ class clients {
             $ra["client_setup"] = $this->setupForm();
             $ra["script"] = "$('.clientSetup').delay(250).slideToggle();";
         } else {
+            $ra['client_list'] = "<h2>Clients</h2>";
             if ($hit == 'client_business_unit') {
-                $ra['client_list'] = $this->intranetClientList();
+                $ra['client_list'] .= $this->intranetClientList();
             }
             $ra["script"] = "$('.clientList').delay(250).slideToggle();";
         }
@@ -127,7 +128,12 @@ class clients {
         $rs = "<table class='table table-striped'>";
         
         while ($client = mysqli_fetch_assoc($clients)) {
-            $rs .= "<tr><td>Wiener</td></tr>";
+            $rs .= "<tr>
+                <td>{$client['first_name']}</td>
+                <td>{$client['last_name']}</td>
+                <td>{$client['business_unit_name']}</td>
+                <td>{$client['phone']}</td>
+                </tr>";
         }
         $rs .= "
         </table>";

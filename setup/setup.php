@@ -184,7 +184,6 @@ class setup {
 
     private function dbSetup() {
         $db_flavor = "{$GLOBALS['db_flavor']}_query";
-
         $clients = "CREATE TABLE IF NOT EXISTS `{$_POST['db_table_prefix']}users` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `username` varchar(30) NOT NULL,
