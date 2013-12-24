@@ -1,1 +1,4 @@
-/nbproject/private/
+/nbproject/
+config.php
+config_old.php
+!.gitignore
