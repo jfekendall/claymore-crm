@@ -15,7 +15,7 @@ class clients {
         $hit = '';
         $db_flavor = "{$GLOBALS['db_flavor']}_query";
         $num_rows = "{$GLOBALS['db_flavor']}_num_rows";
-        $possibilies = array("client_business_unit", "clients");
+        $possibilies = array("client_business_unit", "clients", "clients_accounts");
         foreach ($possibilies as $table) {
             $num = $db_flavor($GLOBALS['db'], "SHOW TABLES LIKE '" . $table . "'");
             if ($num_rows($num) == 1) {
@@ -69,9 +69,63 @@ class clients {
      */
 
     private function clientModelB2BSetup() {
-        $client_umbrella_table = "";
-        $client_locations_table = "";
-        $client_contacts_table = "";
+        $queries = array();
+        $queries[0] = "CREATE TABLE IF NOT EXISTS `clients_accounts` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `email` varchar(50) NOT NULL,
+            `password` varchar(8) NOT NULL,
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=10000";
+        $queries[1] = "CREATE TABLE IF NOT EXISTS `clients_locations` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `account_id` int(11) NOT NULL,
+            `business_name` varchar(30) NOT NULL,
+            `phone` varchar(15) NOT NULL,
+            `street_1` varchar(30) NOT NULL,
+            `street_2` varchar(30),
+            `city` varchar(30) NOT NULL,
+            `state` varchar(2) NOT NULL,
+            `post_code` varchar(10) NOT NULL,
+            `country` varchar(30),
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000";
+        $queries[2] = "CREATE TABLE IF NOT EXISTS `clients_employees` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `account_id` int(11) NOT NULL,
+            `email` varchar(50),
+            `phone` varchar(15),
+            `first_name` varchar(20) NOT NULL,
+            `last_name` varchar(20) NOT NULL,
+            `emp_type` varchar(20),
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000";
+        $queries[3] = "CREATE TABLE IF NOT EXISTS `clients_employee_locations` (
+            `employee_id` int(11) NOT NULL,
+            `location_id` int(11) NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+        $queries[4] = "ALTER TABLE clients_locations
+            ADD CONSTRAINT FK_account_id 
+            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE";
+        $queries[5] = "ALTER TABLE clients_employees
+            ADD CONSTRAINT FK_ce_account_id 
+            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE";
+        $queries[6] = "ALTER TABLE clients_employee_locations
+            ADD CONSTRAINT FK_employee_id 
+            FOREIGN KEY (employee_id) REFERENCES clients_employees(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE";
+        $queries[7] = "ALTER TABLE clients_employee_locations
+            ADD CONSTRAINT FK_cel_location_id 
+            FOREIGN KEY (location_id) REFERENCES clients_locations(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE";
+        foreach($queries AS $query){
+            mysqli_query($GLOBALS['db'], $query)or die(mysqli_error($GLOBALS['db']).$query);
+        }
     }
 
     /*
@@ -122,11 +176,24 @@ class clients {
     }
 
     private function intranetClientList() {
-        
-        $clients = mysqli_query($GLOBALS['db'], "SELECT * FROM client_employees, client_business_unit WHERE business_unit=client_business_unit.id ORDER BY client_employees.id") or die(mysqli_error($GLOBALS['db']));
-        
+        if (!empty($_GET['orderby'])) {
+            if ($_GET['desc']) {
+                $desc = "DESC";
+            }
+            $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
+        }
+        $clients = mysqli_query($GLOBALS['db'], "SELECT * FROM 
+            client_employees, client_business_unit 
+        WHERE 
+            business_unit=client_business_unit.id 
+        $orderby") or die(mysqli_error($GLOBALS['db']));
+
         $rs = "<table class='table table-striped'>";
-        
+        $col_order = array(1, 2, 6, 7, 8, 10, 11);
+        $colnames = array('first_name', 'last_name', 'business_unit_name', 'phone');
+        $as = array('First Name', 'Last Name', 'Business Unit', 'Phone');
+        $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
+        $rs .= $head->out();
         while ($client = mysqli_fetch_assoc($clients)) {
             $rs .= "<tr>
                 <td>{$client['first_name']}</td>
@@ -141,4 +208,5 @@ class clients {
     }
 
 }
+
 ?>
