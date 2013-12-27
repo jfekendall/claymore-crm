@@ -14,7 +14,7 @@ class navigation extends modules {
         while ($en = $enabled->fetch_assoc()) {
             if (sizeof($mods_enabled_info[$en['mod_name']]['feature']) == 1) {
                 $rs .= "<li>
-                <a href='" . strtolower($en['mod_name']) . "'>
+                <a href='{$GLOBALS['base_url']}/" . strtolower($en['mod_name']) . "'>
                     " . ucwords(str_replace('_', ' ', $en['mod_name'])) . "
                 </a></li>";
             } else {

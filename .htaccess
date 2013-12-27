@@ -4,10 +4,10 @@
 </IfModule>
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteOptions inherit
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-z_]+)/(.*)$ index.php?section=$1&action=$2 [NC,L]
+    RewriteRule ^([a-z_]+)/([a-z_0-9]+)/sort/([a-z_]+)/([0-9]+)$ index.php?section=$1&action=$2&orderby=$3&desc=$4 [NC,L]
+    RewriteRule ^([a-z_]+)/([a-z_0-9]+)$ index.php?section=$1&action=$2 [NC,L]
     RewriteRule ^([a-z_]+)$ index.php?section=$1
     
 </IfModule>

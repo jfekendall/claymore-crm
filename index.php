@@ -38,7 +38,7 @@ if (!empty($GLOBALS['db_flavor']) && !empty($GLOBALS['db_hostname'])) { //Assume
 } else {
     die("Configure a database to continue");
 }
-
+require_once("includes/classes/sort_on.php");
 require_once("includes/classes/modules.php");
 require_once("includes/classes/traffic_cop.php");
 
