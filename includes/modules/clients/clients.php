@@ -118,8 +118,6 @@ class clients {
             ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         try {
-            $GLOBALS['db']->beginTransaction();
-
             $one = $GLOBALS['db']->prepare($queries[0]);
             $one->execute();
             $two = $GLOBALS['db']->prepare($queries[1]);
@@ -128,10 +126,11 @@ class clients {
             $three->execute();
             $four = $GLOBALS['db']->prepare($queries[3]);
             $four->execute();
-
-            $GLOBALS['db']->commit();
         } catch (PDOException $ex) {
-            $GLOBALS['db']->rollBack();
+            $GLOBALS['db']->exec("DROP TABLE clients_employee_locations");
+            $GLOBALS['db']->exec("DROP TABLE clients_employees");
+            $GLOBALS['db']->exec("DROP TABLE clients_locations");
+            $GLOBALS['db']->exec("DROP TABLE clients_accounts");
             echo $ex->getMessage() . "<br>";
             die();
         }
@@ -198,7 +197,6 @@ class clients {
         $orderby");
 
         $rs = "<table class='table table-striped'>";
-        $col_order = array(1, 2, 6, 7, 8, 10, 11);
         $colnames = array('first_name', 'last_name', 'business_unit_name', 'phone');
         $as = array('First Name', 'Last Name', 'Business Unit', 'Phone');
         $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
@@ -232,7 +230,6 @@ class clients {
         $orderby");
 
         $rs = "<table class='table table-striped'>";
-        $col_order = array(1, 2, 6, 7, 8, 10, 11);
         $colnames = array('business_name');
         $as = array('Business Name');
         $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
