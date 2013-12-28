@@ -29,11 +29,13 @@ class clients {
             $ra["client_setup"] = $this->setupForm();
             $ra["script"] = "$('.clientSetup').delay(250).slideToggle();";
         } else {
-            $ra['client_list'] = "<h2>Clients</h2>";
+            $ra['client_list'] = "<h2>Clients</h2> 
+                <button type='button' class='btn btn-primary clientAdd'>Add Client</button>";
             if ($hit == 'client_business_unit') {
                 $ra['client_list'] .= $this->intranetClientList();
             } else if ($hit == 'clients_accounts') {
                 $ra['client_list'] .= $this->b2bClientList();
+                $ra['add_form'] = $this->b2bAddClient();
             }
             $ra["script"] = "$('.clientList').delay(250).slideToggle();";
         }
@@ -89,7 +91,7 @@ class clients {
             `city` varchar(30) NOT NULL,
             `state` varchar(2) NOT NULL,
             `post_code` varchar(10) NOT NULL,
-            `country` varchar(30),
+            `country` varchar(30) DEFAULT 'United States',
             PRIMARY KEY (`id`),
             FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
             ON UPDATE CASCADE
@@ -158,6 +160,7 @@ class clients {
             `post_code` varchar(20) DEFAULT NULL
             PRIMARY KEY (`id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
+        $GLOBALS['db']->query($clients_table);
     }
 
     private function setupForm() {
@@ -223,25 +226,60 @@ class clients {
             $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
         }
         $clients = $GLOBALS['db']->query("SELECT * FROM 
-            clients_accounts, clients_locations, clients_employees 
+            clients_accounts, clients_locations
         WHERE 
             clients_accounts.id = clients_locations.account_id
-        AND
-            clients_accounts.id = clients_employees.account_id
+        AND 
+            is_main_office = 1
         $orderby");
 
         $rs = "<table class='table table-striped'>";
-        $colnames = array('business_name');
-        $as = array('Business Name');
+        $colnames = array('account_id', 'business_name', 'phone', 'email');
+        $as = array('Account #', 'Business Name', 'Phone', 'Email');
         $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
         $rs .= $head->out();
         foreach ($clients AS $client) {
             $rs .= "<tr>
+                <td>{$client['account_id']}</td>
                 <td>{$client['business_name']}</td>
+                <td>{$client['phone']}</td>
+                <td>{$client['email']}</td>
                 </tr>";
         }
         $rs .= "
         </table>";
+        return $rs;
+    }
+
+    private function b2bAddClient() {
+        $password = substr(md5(rand(0, 100000)), 0, 7);
+        $elements = new formElements();
+        $rs = "
+            <h2>Add Primary Location</h2>
+            <div class='client_add_form row'>
+                <div class='col-xs-12 col-lg-4 col-md-4 col-sm-12'>
+                    <input type='hidden' name='is_main_office' value='1'>
+                    <label class='business_name'>Company Name<br><input type='text' required placeholder='Company Name' name='business_name'></label>
+                    <label class='email'>Email Address<br><input type='email' required placeholder='someone@domain.com' name='username'></label>        
+                    <label class='phone'>Location Phone<br><input type='tel' required placeholder='x-xxx-xxx-xxxx' name='phone'></label>        
+                    <input type='hidden' name='password' value='$password'>
+                    
+                    <div class='clearFix'></div>
+                </div>
+                <div class='col-xs-12 col-lg-5 col-md-5 col-sm-12'>
+                    <label>Street 1 <br><input type='text' required placeholder='123 Main St.' name='street_1'></label>
+                    <label>Street 2 <br><input type='text' placeholder='Ste. 5' name='street_2'></label>
+                    <label class='city'>City<br><input type='text' required placeholder='Toledo' name='city'></label>
+
+                    <label class='state'>State<br>".$elements->states('us')."</label>
+                        
+                    <label class='zip'>Postal Code<br>
+                        <input type='text' required placeholder='xxxxx-xxxx' name='postal_code'>
+                    </label>
+                    <div class='clearFix'></div>
+                </div>
+                    
+            </div>";
         return $rs;
     }
 

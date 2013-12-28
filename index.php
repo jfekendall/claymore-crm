@@ -41,7 +41,7 @@ if (!empty($GLOBALS['db_flavor']) && !empty($GLOBALS['db_hostname'])) { //Assume
 require_once("includes/classes/sort_on.php");
 require_once("includes/classes/modules.php");
 require_once("includes/classes/traffic_cop.php");
-
+require_once("includes/classes/formElements.php");
 $verdict = new traffic_cop();
 if (!empty($verdict->return['module'])) {
     require_once("includes/modules/{$verdict->return['module']}");

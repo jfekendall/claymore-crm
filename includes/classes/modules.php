@@ -62,7 +62,7 @@ class modules {
                     $enabled[$inst]['mod_nav_order'] = $mod_info['mod_nav_order'];
                     if ($features = opendir("./includes/modules/$inst")) {
                         while (false !== ($mod = readdir($features))) {
-                            if ($mod != "." && $mod != "..") {
+                            if ($mod != "." && $mod != ".." && !is_dir("./includes/modules/$inst/$mod")) {
                                 $enabled[$inst]['feature'][] = $mod;
                             }
                         }

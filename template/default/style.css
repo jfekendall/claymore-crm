@@ -169,3 +169,21 @@ color: white;
 .clientSetupForm{
     display:none;
 }
+
+.client_add_form label input[name=street_1], .client_add_form label input[name=street_2],.client_add_form label input[name=business_name]{
+    width:350px;
+}
+
+.client_add_form .city, .client_add_form .state{
+    
+}
+
+.client_add_form .city input{
+width:150px;    
+}
+.client_add_form .state select{
+width:150px;    
+}
+.client_add_form .zip input{
+width:75px;    
+}
