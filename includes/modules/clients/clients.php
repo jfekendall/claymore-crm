@@ -83,7 +83,7 @@ class clients {
         $queries[1] = "CREATE TABLE IF NOT EXISTS `clients_locations` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `account_id` int(11) NOT NULL,
-            `business_name` varchar(30) NOT NULL,
+            `business_name` varchar(60) NOT NULL,
             `is_main_office` int(1) NOT NULL DEFAULT '0',
             `phone` varchar(15) NOT NULL,
             `street_1` varchar(30) NOT NULL,
@@ -260,7 +260,7 @@ class clients {
                 <div class='col-xs-12 col-lg-4 col-md-4 col-sm-12'>
                     <input type='hidden' name='is_main_office' value='1'>
                     <label class='business_name'>Company Name<br><input type='text' required placeholder='Company Name' name='business_name'></label>
-                    <label class='email'>Email Address<br><input type='email' required placeholder='someone@domain.com' name='username'></label>        
+                    <label class='email'>Email Address<br><input type='email' required placeholder='someone@domain.com' name='email'></label>        
                     <label class='phone'>Location Phone<br><input type='tel' required placeholder='x-xxx-xxx-xxxx' name='phone'></label>        
                     <input type='hidden' name='password' value='$password'>
                     
@@ -278,6 +278,7 @@ class clients {
                     </label>
                     <div class='clearFix'></div>
                 </div>
+                <button type='button' class='btn btn-primary addNewClient'>Add Client</button>
                     
             </div>";
         return $rs;

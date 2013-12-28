@@ -33,7 +33,7 @@ class sort_on {
             }else{
                 $icon = '';
             }
-            $rs .= "<th style='text-align:center;'>
+            $rs .= "<th>
                 <a href='$this->base_url/$this->section/$this->action".(isset($_GET['subaction']) ? "/".$_GET['subaction'] : '')."/sort/{$colnames[$j]}/$desc'>
                 {$as[$j]}{$icon}
                 </a>
