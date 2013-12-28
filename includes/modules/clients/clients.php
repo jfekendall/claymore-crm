@@ -32,7 +32,7 @@ class clients {
             $ra['client_list'] = "<h2>Clients</h2>";
             if ($hit == 'client_business_unit') {
                 $ra['client_list'] .= $this->intranetClientList();
-            }else if ($hit == 'clients_accounts') {
+            } else if ($hit == 'clients_accounts') {
                 $ra['client_list'] .= $this->b2bClientList();
             }
             $ra["script"] = "$('.clientList').delay(250).slideToggle();";
@@ -89,7 +89,10 @@ class clients {
             `state` varchar(2) NOT NULL,
             `post_code` varchar(10) NOT NULL,
             `country` varchar(30),
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000";
         $queries[2] = "CREATE TABLE IF NOT EXISTS `clients_employees` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -99,34 +102,38 @@ class clients {
             `first_name` varchar(20) NOT NULL,
             `last_name` varchar(20) NOT NULL,
             `emp_type` varchar(20),
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
+            ON UPDATE CASCADE
+            ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000";
         $queries[3] = "CREATE TABLE IF NOT EXISTS `clients_employee_locations` (
             `employee_id` int(11) NOT NULL,
-            `location_id` int(11) NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
-        $queries[4] = "ALTER TABLE clients_locations
-            ADD CONSTRAINT FK_account_id 
-            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
-            ON UPDATE CASCADE
-            ON DELETE CASCADE";
-        $queries[5] = "ALTER TABLE clients_employees
-            ADD CONSTRAINT FK_ce_account_id 
-            FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
-            ON UPDATE CASCADE
-            ON DELETE CASCADE";
-        $queries[6] = "ALTER TABLE clients_employee_locations
-            ADD CONSTRAINT FK_employee_id 
+            `location_id` int(11) NOT NULL,
             FOREIGN KEY (employee_id) REFERENCES clients_employees(id) 
             ON UPDATE CASCADE
-            ON DELETE CASCADE";
-        $queries[7] = "ALTER TABLE clients_employee_locations
-            ADD CONSTRAINT FK_cel_location_id 
+            ON DELETE CASCADE,
             FOREIGN KEY (location_id) REFERENCES clients_locations(id) 
             ON UPDATE CASCADE
-            ON DELETE CASCADE";
-        foreach ($queries AS $query) {
-            $GLOBALS['db']->query($query);
+            ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+        try {
+            $GLOBALS['db']->beginTransaction();
+
+            $one = $GLOBALS['db']->prepare($queries[0]);
+            $one->execute();
+            $two = $GLOBALS['db']->prepare($queries[1]);
+            $two->execute();
+            $three = $GLOBALS['db']->prepare($queries[2]);
+            $three->execute();
+            $four = $GLOBALS['db']->prepare($queries[3]);
+            $four->execute();
+
+            $GLOBALS['db']->commit();
+        } catch (PDOException $ex) {
+            $GLOBALS['db']->rollBack();
+            echo $ex->getMessage() . "<br>";
+            die();
         }
     }
 
@@ -196,7 +203,7 @@ class clients {
         $as = array('First Name', 'Last Name', 'Business Unit', 'Phone');
         $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
         $rs .= $head->out();
-        foreach($clients AS $client) {
+        foreach ($clients AS $client) {
             $rs .= "<tr>
                 <td>{$client['first_name']}</td>
                 <td>{$client['last_name']}</td>
