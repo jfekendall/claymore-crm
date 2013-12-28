@@ -17,8 +17,9 @@ class clients {
         $num_rows = "{$GLOBALS['db_flavor']}_num_rows";
         $possibilies = array("client_business_unit", "clients", "clients_accounts");
         foreach ($possibilies as $table) {
-            $num = $db_flavor($GLOBALS['db'], "SHOW TABLES LIKE '" . $table . "'");
-            if ($num_rows($num) == 1) {
+            $q = $GLOBALS['db']->query("SHOW TABLES LIKE '" . $table . "'");
+            $num = $q->rowCount();
+            if ($num == 1) {
                 $isSetup = true;
                 $hit = $table;
                 break;
@@ -31,6 +32,8 @@ class clients {
             $ra['client_list'] = "<h2>Clients</h2>";
             if ($hit == 'client_business_unit') {
                 $ra['client_list'] .= $this->intranetClientList();
+            }else if ($hit == 'clients_accounts') {
+                $ra['client_list'] .= $this->b2bClientList();
             }
             $ra["script"] = "$('.clientList').delay(250).slideToggle();";
         }
@@ -44,7 +47,6 @@ class clients {
      */
 
     private function clientModelIntranetSetup() {
-        $db_flavor = "{$GLOBALS['db_flavor']}_query";
         $client_business_unit_table = "CREATE TABLE IF NOT EXISTS `client_business_unit` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `business_unit_name` varchar(40) NOT NULL,
@@ -59,8 +61,8 @@ class clients {
             `email` varchar(50) DEFAULT NULL,
             PRIMARY KEY (`id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-        $db_flavor($GLOBALS['db'], "$client_business_unit_table");
-        $db_flavor($GLOBALS['db'], "$client_employees_table");
+        $GLOBALS['db']->query($client_business_unit_table);
+        $GLOBALS['db']->query($client_employees_table);
     }
 
     /*
@@ -123,8 +125,8 @@ class clients {
             FOREIGN KEY (location_id) REFERENCES clients_locations(id) 
             ON UPDATE CASCADE
             ON DELETE CASCADE";
-        foreach($queries AS $query){
-            mysqli_query($GLOBALS['db'], $query)or die(mysqli_error($GLOBALS['db']).$query);
+        foreach ($queries AS $query) {
+            $GLOBALS['db']->query($query);
         }
     }
 
@@ -182,11 +184,11 @@ class clients {
             }
             $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
         }
-        $clients = mysqli_query($GLOBALS['db'], "SELECT * FROM 
+        $clients = $GLOBALS['db']->query($GLOBALS['db'], "SELECT * FROM 
             client_employees, client_business_unit 
         WHERE 
             business_unit=client_business_unit.id 
-        $orderby") or die(mysqli_error($GLOBALS['db']));
+        $orderby");
 
         $rs = "<table class='table table-striped'>";
         $col_order = array(1, 2, 6, 7, 8, 10, 11);
@@ -194,12 +196,43 @@ class clients {
         $as = array('First Name', 'Last Name', 'Business Unit', 'Phone');
         $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
         $rs .= $head->out();
-        while ($client = mysqli_fetch_assoc($clients)) {
+        foreach($clients AS $client) {
             $rs .= "<tr>
                 <td>{$client['first_name']}</td>
                 <td>{$client['last_name']}</td>
                 <td>{$client['business_unit_name']}</td>
                 <td>{$client['phone']}</td>
+                </tr>";
+        }
+        $rs .= "
+        </table>";
+        return $rs;
+    }
+
+    private function b2bClientList() {
+        if (!empty($_GET['orderby'])) {
+            if ($_GET['desc']) {
+                $desc = "DESC";
+            }
+            $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
+        }
+        $clients = $GLOBALS['db']->query("SELECT * FROM 
+            clients_accounts, clients_locations, clients_employees 
+        WHERE 
+            clients_accounts.id = clients_locations.account_id
+        AND
+            clients_accounts.id = clients_employees.account_id
+        $orderby");
+
+        $rs = "<table class='table table-striped'>";
+        $col_order = array(1, 2, 6, 7, 8, 10, 11);
+        $colnames = array('business_name');
+        $as = array('Business Name');
+        $head = new sort_on('clients', '0', $colnames, $as, $_GET['orderby']);
+        $rs .= $head->out();
+        foreach ($clients AS $client) {
+            $rs .= "<tr>
+                <td>{$client['business_name']}</td>
                 </tr>";
         }
         $rs .= "

@@ -53,12 +53,11 @@ class modules {
         $counter = 0;
         foreach (array_keys($this->installed()) AS $inst) {
             $exists_q = $GLOBALS['db']->query("SELECT count(id) FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
-            $is_registered = current($exists_q->fetch_row());
+            $is_registered = current($exists_q->fetch(PDO::FETCH_ASSOC));
             if (!empty($is_registered) && $is_registered == 1) {
 
                 $mod_enabled = $GLOBALS['db']->query("SELECT enabled, mod_nav_order, hide_in_nav FROM {$GLOBALS['db_table_prefix']}modules WHERE mod_name='$inst'");
-                $mod_info = $mod_enabled->fetch_assoc();
-
+                $mod_info = $mod_enabled->fetch(PDO::FETCH_ASSOC);
                     $enabled[$inst]['enabled'] = $mod_info['enabled'];
                     $enabled[$inst]['mod_nav_order'] = $mod_info['mod_nav_order'];
                     if ($features = opendir("./includes/modules/$inst")) {

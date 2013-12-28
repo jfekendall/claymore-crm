@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['db'] = new mysqli($GLOBALS['db_hostname'], $GLOBALS['db_username'], $GLOBALS['db_password'], $GLOBALS['db_database']);
-if($GLOBALS['db']->connect_errno > 0){
-    die('Something is wrong in your configuration. Server says: [' . $GLOBALS['db']->connect_error . ']');
-}
+
+$GLOBALS['db'] = new PDO("mysql:host={$GLOBALS['db_hostname']};dbname={$GLOBALS['db_database']};charset=utf8", $GLOBALS['db_username'], $GLOBALS['db_password']);
+$GLOBALS['db']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$GLOBALS['db']->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 ?>
