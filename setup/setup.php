@@ -183,7 +183,6 @@ class setup {
     }
 
     private function dbSetup() {
-        $db_flavor = "{$GLOBALS['db_flavor']}_query";
         $clients = "CREATE TABLE IF NOT EXISTS `{$_POST['db_table_prefix']}users` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `username` varchar(30) NOT NULL,
@@ -203,9 +202,9 @@ class setup {
         $core_modules = "INSERT INTO `modules` (`id`, `mod_name`, `mod_nav_order`, `enabled`, `hide_in_nav`) VALUES
             (1, 'core', 100, 1, 0),
             (2, 'clients', 1, 1, 0)";
-        $db_flavor($GLOBALS['db'], $clients);
-        $db_flavor($GLOBALS['db'], $modules);
-        $db_flavor($GLOBALS['db'], $core_modules);
+        $GLOBALS['db']->query($clients);
+        $GLOBALS['db']->query($modules);
+        $GLOBALS['db']->query($core_modules);
     }
 
     function checklist() {
