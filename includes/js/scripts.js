@@ -46,4 +46,8 @@ $(document).ready(function() {
     });
 });
 
+function phoneFormat(str) {
 
+    return str.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+
+}
