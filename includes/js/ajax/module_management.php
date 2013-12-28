@@ -20,8 +20,7 @@ switch ($_GET['action']) {
 }
 
 function changeNavOrder() {
-    $db_flavor = "{$GLOBALS['db_flavor']}_query";
-    $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
+    $GLOBALS['db']->query("UPDATE {$GLOBALS['db_table_prefix']}modules 
     SET 
         mod_nav_order='{$_GET['mod_nav_order']}'
     WHERE 
@@ -29,13 +28,12 @@ function changeNavOrder() {
 }
 
 function enableModule() {
-    $db_flavor = "{$GLOBALS['db_flavor']}_query";
     if ($_GET['current_state'] == 'false') {
         $bit = 0;
     } else {
         $bit = 1;
     }
-    $db_flavor($GLOBALS['db'], "UPDATE {$GLOBALS['db_table_prefix']}modules 
+    $GLOBALS['db']->query("UPDATE {$GLOBALS['db_table_prefix']}modules 
     SET 
         enabled=$bit 
     WHERE 
@@ -43,15 +41,14 @@ function enableModule() {
 }
 
 function removeModule() {
-    $db_flavor = "{$GLOBALS['db_flavor']}_query";
     $manifest = explode("\n", file_get_contents("{$_SERVER['DOCUMENT_ROOT']}/includes/modules/{$_GET['module']}/manifest"));
     foreach ($manifest AS $file) {
-        if(!unlink("{$_SERVER['DOCUMENT_ROOT']}/$file")){
+        if (!unlink("{$_SERVER['DOCUMENT_ROOT']}/$file")) {
             die("Permissions aren't right on {$_SERVER['DOCUMENT_ROOT']}/$file");
         }
     }
     rmdir("{$_SERVER['DOCUMENT_ROOT']}/includes/modules/{$_GET['module']}");
-    $db_flavor($GLOBALS['db'], "DELETE FROM {$GLOBALS['db_table_prefix']}modules 
+    $GLOBALS['db']->query("DELETE FROM {$GLOBALS['db_table_prefix']}modules 
     WHERE 
         mod_name='{$_GET['module']}'");
 }
