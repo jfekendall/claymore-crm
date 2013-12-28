@@ -82,6 +82,7 @@ class clients {
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `account_id` int(11) NOT NULL,
             `business_name` varchar(30) NOT NULL,
+            `is_main_office` int(1) NOT NULL DEFAULT '0',
             `phone` varchar(15) NOT NULL,
             `street_1` varchar(30) NOT NULL,
             `street_2` varchar(30),
