@@ -31,7 +31,7 @@ class login {
                 `password` = '" . hash($GLOBALS['auth_password_hash_algo'], $this->password) . "'");
 
         if ($allowed->rowCount()) {
-            $id = $result->fetch(PDO::FETCH_ASSOC);
+            $id = $allowed->fetch(PDO::FETCH_ASSOC);
             setcookie("claymore_user", $id['id'], time() + $GLOBALS['auth_expire_time']);
             header("Location: {$GLOBALS['base_url']}");
         } else {

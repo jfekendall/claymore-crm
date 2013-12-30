@@ -95,7 +95,9 @@ class clients {
             PRIMARY KEY (`id`),
             FOREIGN KEY (account_id) REFERENCES clients_accounts(id) 
             ON UPDATE CASCADE
-            ON DELETE CASCADE
+            ON DELETE CASCADE,
+            INDEX (  `business_name` ),
+            INDEX (  `phone` )
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1000";
         $queries[2] = "CREATE TABLE IF NOT EXISTS `clients_employees` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -129,6 +131,8 @@ class clients {
             $three->execute();
             $four = $GLOBALS['db']->prepare($queries[3]);
             $four->execute();
+            $five = $GLOBALS['db']->prepare($queries[4]);
+            $five->execute();
         } catch (PDOException $ex) {
             $GLOBALS['db']->exec("DROP TABLE clients_employee_locations");
             $GLOBALS['db']->exec("DROP TABLE clients_employees");
@@ -267,15 +271,7 @@ class clients {
                     <div class='clearFix'></div>
                 </div>
                 <div class='col-xs-12 col-lg-5 col-md-5 col-sm-12'>
-                    <label>Street 1 <br><input type='text' required placeholder='123 Main St.' name='street_1'></label>
-                    <label>Street 2 <br><input type='text' placeholder='Ste. 5' name='street_2'></label>
-                    <label class='city'>City<br><input type='text' required placeholder='Toledo' name='city'></label>
-
-                    <label class='state'>State<br>".$elements->states('us')."</label>
-                        
-                    <label class='zip'>Postal Code<br>
-                        <input type='text' required placeholder='xxxxx-xxxx' name='postal_code'>
-                    </label>
+                    ".$elements->usStyleAddress('canada')."
                     <div class='clearFix'></div>
                 </div>
                 <button type='button' class='btn btn-primary addNewClient'>Add Client</button>

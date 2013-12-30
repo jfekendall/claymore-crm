@@ -37,6 +37,19 @@ class formElements {
             </script>";
         return $rs;
     }
+    
+    public function usStyleAddress($country){
+        $rs = "<label>Street 1 <br><input type='text' required placeholder='123 Main St.' name='street_1'></label>
+                <label>Street 2 <br><input type='text' placeholder='Ste. 5' name='street_2'></label>
+                <label class='city'>City<br><input type='text' required placeholder='Toledo' name='city'></label>
+
+                <label class='state'>State<br>".$this->states($country)."</label>
+
+                <label class='zip'>Postal Code<br>
+                    <input type='text' required placeholder='xxxxx-xxxx' name='postal_code'>
+                </label>";
+        return $rs;
+    }
 
 }
 
