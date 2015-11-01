@@ -9,6 +9,30 @@ switch ($_GET['i']) {
     case 'newClient':
         newClient();
         break;
+    case 'clientInfo':
+        clientInfo();
+        break;
+}
+function clientInfo(){
+    global $db;
+    //TODO: Make look pretty. Separate html into a template.
+    echo '<div class="container"><div class="row" "><div class="col-md-12">
+        <ul class="nav nav-pills" style="background:transparent;margin:0;">
+  <li class="active"><a href="javascript:void(0);" onclick="$(\'.info\').hide();$(\'.enterprise_info\').show();">Enterprise Information</a></li>
+  <li><a href="javascript:void(0);" onclick="$(\'.info\').hide();">Locations</a></li>
+  <li><a href="#">Employees</a></li>
+  <li><a href="#">Account Information</a></li>
+</ul></div></div>';
+    echo "<div class='row info enterprise_info'>";
+    $info = $db->query("SELECT * FROM clients_locations WHERE id={$_GET['id']}");
+    $einfo = $info->fetch(PDO::FETCH_ASSOC);
+    foreach(array_keys($einfo) AS $e){
+        if(in_array($e, array('id', 'is_main_office'))){
+            continue;
+        }
+        echo "<div class='row'><div class='col-md-2'>{$e}</div><div class='col-md-10'>{$einfo[$e]}</div></div>";
+    }
+    echo "</div></div>";
 }
 
 function newClient() {

@@ -251,9 +251,9 @@ class clients {
         foreach ($clients AS $client) {
             $rs .= "<tr>
                 <td>{$client['account_id']}</td>
-                <td>{$client['business_name']}</td>
+                <td><a href='javascript:void();' id='{$client['id']}' class='client_info'>{$client['business_name']}</a></td>
                 <td>{$client['phone']}</td>
-                <td>{$client['email']}</td>
+                <td><a href='mailto:{$client['email']}'>{$client['email']}</a></td>
                 </tr>";
         }
         $rs .= "

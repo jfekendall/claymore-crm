@@ -1,10 +1,18 @@
-$(function() {
-    $('.clientAdd').click(function() {
+$(function () {
+    $('.client_info').click(function () {
+
+        $('.clientInfoWindow').html($.ajax({
+            url: "includes/modules/clients/js/clients.php?i=clientInfo&id="+this.id,
+            async: false
+        }).responseText);
+        $('.clientInfoWindow').slideToggle();
+    });
+    $('.clientAdd').click(function () {
         $('.clientAddForm').slideToggle();
     });
-    $('input[name=postal_code]').blur(function() {
+    $('input[name=postal_code]').blur(function () {
         var correct = $.ajax({
-            url: this_location +"/includes/js/ajax/setCorrectCityState.php?zip=" + $(this).val(),
+            url: this_location + "/includes/js/ajax/setCorrectCityState.php?zip=" + $(this).val(),
             async: false
         }).responseText;
         if (correct) {
@@ -13,15 +21,15 @@ $(function() {
             $('select[name=state] option[value=' + correctArray[1] + ']').attr('selected', true);
         }
     });
-    $('.addNewClient').click(function() {
+    $('.addNewClient').click(function () {
         var required = new Array('business_name', 'password', 'email', 'phone', 'street_1', 'city', 'postal_code');
         var stop = 0;
         var ohCrap = '';
         var ajaxUrl = this_location + "/includes/modules/clients/js/clients.php?i=newClient";
-        required.forEach(function(req) {
+        required.forEach(function (req) {
             if (!$('input[name=' + req + ']').val()) {
                 req = req.replace('_', ' ');
-                req = req.replace(/\w\S*/g, function(txt) {
+                req = req.replace(/\w\S*/g, function (txt) {
                     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
                 });
                 ohCrap = ohCrap + "Required field " + req + " is empty.<br>";
