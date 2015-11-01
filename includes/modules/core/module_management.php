@@ -75,7 +75,7 @@ class module_management extends modules {
                             ucwords(str_replace('_', ' ', $name)) . "
                     </td>
                     <td class='mm_sub_modules mm_has_template'>";
-                    if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$GLOBALS['template']}/{$name}_template.html")) {
+                    if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$CONFIG['template']}/{$name}_template.html")) {
                         $rs .= "<i class='glyphicon glyphicon-ok'></i>";
                     } else {
                         $rs .="<i class='glyphicon glyphicon-remove'></i>";

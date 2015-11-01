@@ -3,9 +3,9 @@
 //error_reporting(E_ALL);
 //ini_set('display_errors', '1');
 include("{$_SERVER['DOCUMENT_ROOT']}/config.php");
-include("../../db/{$GLOBALS['db_flavor']}.php");
+include("../../db/{$CONFIG['db_flavor']}.php");
 
-setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $GLOBALS['auth_expire_time']);
+setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $CONFIG['auth_expire_time']);
 
 switch ($_GET['action']) {
     case "enableModule":
@@ -20,7 +20,7 @@ switch ($_GET['action']) {
 }
 
 function changeNavOrder() {
-    $GLOBALS['db']->query("UPDATE {$GLOBALS['db_table_prefix']}modules 
+    $CONFIG['db']->query("UPDATE {$CONFIG['db_table_prefix']}modules 
     SET 
         mod_nav_order='{$_GET['mod_nav_order']}'
     WHERE 
@@ -33,7 +33,7 @@ function enableModule() {
     } else {
         $bit = 1;
     }
-    $GLOBALS['db']->query("UPDATE {$GLOBALS['db_table_prefix']}modules 
+    $CONFIG['db']->query("UPDATE {$CONFIG['db_table_prefix']}modules 
     SET 
         enabled=$bit 
     WHERE 
@@ -48,7 +48,7 @@ function removeModule() {
         }
     }
     rmdir("{$_SERVER['DOCUMENT_ROOT']}/includes/modules/{$_GET['module']}");
-    $GLOBALS['db']->query("DELETE FROM {$GLOBALS['db_table_prefix']}modules 
+    $CONFIG['db']->query("DELETE FROM {$CONFIG['db_table_prefix']}modules 
     WHERE 
         mod_name='{$_GET['module']}'");
 }

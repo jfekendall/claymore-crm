@@ -3,8 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 include("{$_SERVER['DOCUMENT_ROOT']}/config.php");
-include("{$_SERVER['DOCUMENT_ROOT']}/includes/db/{$GLOBALS['db_flavor']}.php");
-$db = $GLOBALS['db'];
+include("{$_SERVER['DOCUMENT_ROOT']}/includes/db/{$CONFIG['db_flavor']}.php");
+$db = $CONFIG['db'];
 
 switch ($_GET['i']) {
     case 'newClient':
@@ -21,7 +21,7 @@ function newClient() {
     VALUES
         ('{$_GET['email']}','{$_GET['password']}')");
         $query->execute();
-        $accountNumber = $GLOBALS['db']->lastInsertId();
+        $accountNumber = $CONFIG['db']->lastInsertId();
         $query = $db->prepare("INSERT INTO clients_locations 
         (account_id, business_name, is_main_office,phone,street_1, street_2, city, state, post_code)
     VALUES

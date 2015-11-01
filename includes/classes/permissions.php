@@ -8,7 +8,7 @@ class permissions {
     private $whereami;
     private $whoami;
     function __construct(){
-        $this->whereami = $GLOBALS['location'];
+        $this->whereami = $CONFIG['location'];
         $this->setup();    
         if(!$this->allowed_to_be_here()){
             echo "You aren't supposed to be here.";

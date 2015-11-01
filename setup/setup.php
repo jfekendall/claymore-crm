@@ -7,8 +7,16 @@
  */
 class setup {
 
+    private $config = array();
+
+    function __construct($CONFIG) {
+        $this->config = $CONFIG;
+    }
+
     public function stuff($setupArray) {
+
         if (isset($_POST['db_flavor'])) {
+            $this->config = array_merge($this->config, $_POST);
             $this->genConfig();
         } else {
             $overall = true;
@@ -54,7 +62,7 @@ class setup {
         </tr>
         <tr>
             <td>Root URL</td>
-            <td><input type='text' name='base_url' value='{$GLOBALS['base_url']}' required></td>
+            <td><input type='text' name='base_url' value='{$this->config['base_url']}' required></td>
         </tr>
         <tr>
             <td>Application Name</td>
@@ -80,7 +88,7 @@ class setup {
         </tr>
         <tr>
             <td>DB Password</td>
-            <td><input type='password' name='db_password' placeholder='password' required></td>
+            <td><input type='password' name='db_password' placeholder='password'></td>
         </tr>
         <tr>
             <td>DB Name</td>
@@ -163,48 +171,39 @@ class setup {
     }
 
     private function genConfig() {
-        //print_r($_POST);
-        $config_file_contents = "\n";
-        foreach (array_keys($_POST) AS $config) {
-            $config_file_contents .= "\$GLOBALS['$config'] = '{$_POST[$config]}';\n";
+
+        $config_file_contents = "<?php";
+        foreach (array_keys($this->config) AS $config) {
+            $config_file_contents .= "\n\$CONFIG['$config'] = '{$this->config[$config]}';\n";
         }
         $config_file_contents .= "\$replace = array(\n
-            'title' => '{$_POST['title']}',\n
+            'title' => '{$this->config['title']}',\n
             'template' => 'default',\n
             'copyright' => 'Proudly Powered by Claymore CRM',\n
-            'base_url' => '{$_POST['base_url']}'\n
-        );\n?>";
-
-        file_put_contents("{$_SERVER['DOCUMENT_ROOT']}/config.php", $config_file_contents, FILE_APPEND);
-        //chmod("{$_SERVER['DOCUMENT_ROOT']}/config.php", 0555);
+            'base_url' => '{$this->config['base_url']}'\n
+        );
+        \$CONFIG['db'] = new PDO(\"mysql:host={$this->config['db_hostname']};dbname={$this->config['db_database']};charset=utf8\", '{$this->config['db_username']}', '{$this->config['db_password']}');\n
+        \$CONFIG['db']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);\n
+        \$CONFIG['db']->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        \n";
+        file_put_contents("{$this->config['base_dir']}config.php", $config_file_contents);
+        $this->dbSetup();
         echo "<script>
-                document.location = '{$_POST['base_url']}'
+                document.location = '{$this->config['base_url']}'
             </script>";
     }
 
     private function dbSetup() {
-        $clients = "CREATE TABLE IF NOT EXISTS `{$_POST['db_table_prefix']}users` (
-              `id` int(11) NOT NULL AUTO_INCREMENT,
-              `username` varchar(30) NOT NULL,
-              `password` varchar(150) DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            ) ENGINE=innodb DEFAULT CHARSET=latin1 AUTO_INCREMENT=1";
-
-        $modules = "CREATE TABLE IF NOT EXISTS `{$_POST['db_table_prefix']}modules` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `mod_name` varchar(20) NOT NULL,
-            `mod_nav_order` tinyint(2) NOT NULL DEFAULT '0',
-            `enabled` tinyint(1) NOT NULL DEFAULT '0',
-            `hide_in_nav` tinyint(1) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`id`)
-          ) ENGINE=innodb  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1";
-
-        $core_modules = "INSERT INTO `modules` (`id`, `mod_name`, `mod_nav_order`, `enabled`, `hide_in_nav`) VALUES
-            (1, 'core', 100, 1, 0),
-            (2, 'clients', 1, 1, 0)";
-        $GLOBALS['db']->query($clients);
-        $GLOBALS['db']->query($modules);
-        $GLOBALS['db']->query($core_modules);
+        $db = new PDO("mysql:host={$this->config['db_hostname']};dbname={$this->config['db_database']};charset=utf8", $this->config['db_username'], $this->config['db_password']);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $sql = file_get_contents($this->config['base_dir'] . "setup/claymore.sql");
+        $sql = str_replace(array('users', 'modules'), array("{$this->config['db_table_prefix']}users", "{$this->config['db_table_prefix']}modules"), $sql);
+        foreach (explode(';', $sql) AS $s) {
+            if (!empty(trim($s))) {
+                $db->query($s);
+            }
+        }
     }
 
     function checklist() {

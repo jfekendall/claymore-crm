@@ -10,14 +10,15 @@ class clients {
     private $mode; //Intranet, B2B, B2C
 
     public function out() {
+        extract($GLOBALS['CONFIG']);
         $ra = array();
         $isSetup = false;
         $hit = '';
-        $db_flavor = "{$GLOBALS['db_flavor']}_query";
-        $num_rows = "{$GLOBALS['db_flavor']}_num_rows";
+        $db_flavor = "{$db_flavor}_query";
+        $num_rows = "{$db_flavor}_num_rows";
         $possibilies = array("client_business_unit", "clients", "clients_accounts");
         foreach ($possibilies as $table) {
-            $q = $GLOBALS['db']->query("SHOW TABLES LIKE '" . $table . "'");
+            $q = $db->query("SHOW TABLES LIKE '" . $table . "'");
             $num = $q->rowCount();
             if ($num == 1) {
                 $isSetup = true;
@@ -49,6 +50,7 @@ class clients {
      */
 
     private function clientModelIntranetSetup() {
+        extract($GLOBALS['CONFIG']);
         $client_business_unit_table = "CREATE TABLE IF NOT EXISTS `client_business_unit` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `business_unit_name` varchar(40) NOT NULL,
@@ -63,8 +65,8 @@ class clients {
             `email` varchar(50) DEFAULT NULL,
             PRIMARY KEY (`id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-        $GLOBALS['db']->query($client_business_unit_table);
-        $GLOBALS['db']->query($client_employees_table);
+        $db->query($client_business_unit_table);
+        $db->query($client_employees_table);
     }
 
     /*
@@ -73,6 +75,7 @@ class clients {
      */
 
     private function clientModelB2BSetup() {
+        extract($GLOBALS['CONFIG']);
         $queries = array();
         $queries[0] = "CREATE TABLE IF NOT EXISTS `clients_accounts` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -123,21 +126,21 @@ class clients {
             ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         try {
-            $one = $GLOBALS['db']->prepare($queries[0]);
+            $one = $db->prepare($queries[0]);
             $one->execute();
-            $two = $GLOBALS['db']->prepare($queries[1]);
+            $two = $db->prepare($queries[1]);
             $two->execute();
-            $three = $GLOBALS['db']->prepare($queries[2]);
+            $three = $db->prepare($queries[2]);
             $three->execute();
-            $four = $GLOBALS['db']->prepare($queries[3]);
+            $four = $db->prepare($queries[3]);
             $four->execute();
-            $five = $GLOBALS['db']->prepare($queries[4]);
+            $five = $db->prepare($queries[4]);
             $five->execute();
         } catch (PDOException $ex) {
-            $GLOBALS['db']->exec("DROP TABLE clients_employee_locations");
-            $GLOBALS['db']->exec("DROP TABLE clients_employees");
-            $GLOBALS['db']->exec("DROP TABLE clients_locations");
-            $GLOBALS['db']->exec("DROP TABLE clients_accounts");
+            $db->exec("DROP TABLE clients_employee_locations");
+            $db->exec("DROP TABLE clients_employees");
+            $db->exec("DROP TABLE clients_locations");
+            $db->exec("DROP TABLE clients_accounts");
             echo $ex->getMessage() . "<br>";
             die();
         }
@@ -149,7 +152,7 @@ class clients {
      */
 
     private function clientModelB2CSetup() {
-
+        extract($GLOBALS['CONFIG']);
         $clients_table = "CREATE TABLE IF NOT EXISTS `clients` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `first_name` varchar(20) NOT NULL,
@@ -164,10 +167,11 @@ class clients {
             `post_code` varchar(20) DEFAULT NULL
             PRIMARY KEY (`id`)
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-        $GLOBALS['db']->query($clients_table);
+        $db->query($clients_table);
     }
 
     private function setupForm() {
+        extract($GLOBALS['CONFIG']);
         if (isset($_POST['setupAs'])) {
             if ($_POST['setupAs'] == "intranet") {
                 $this->clientModelIntranetSetup();
@@ -181,7 +185,7 @@ class clients {
         } else {
             $rs = "<h2>It seems you haven't set-up Client Management yet.</h2>
             <p>Answer this question to continue: Which statement is the most true?</p>
-            <form action='{$GLOBALS['base_url']}/clients' method='POST'>
+            <form action='{$base_url}/clients' method='POST'>
                 <p><input type='radio' name='setupAs' value='intranet' required> I want to use this to support the company from within (Intranet). My \"Clients\" are actually workers within the same company as I work.</p>
                 <p><input type='radio' name='setupAs' value='B2B' required> I want to use this to manage my company's interactions with other companies. The clients are other companies with possibly multiple locations with possibly multiple employees.</p>
                 <p><input type='radio' name='setupAs' value='B2C' required> I want to use this to manage my company's interactions end-users. The clients are individuals who bought or will buy a product or service from my company.</p>
@@ -196,9 +200,9 @@ class clients {
             if ($_GET['desc']) {
                 $desc = "DESC";
             }
-            $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
+            $orderby = " ORDER BY " . mysqli_escape_string($db, $_GET['orderby']) . " $desc ";
         }
-        $clients = $GLOBALS['db']->query($GLOBALS['db'], "SELECT * FROM 
+        $clients = $db->query($db, "SELECT * FROM 
             client_employees, client_business_unit 
         WHERE 
             business_unit=client_business_unit.id 
@@ -227,9 +231,9 @@ class clients {
             if ($_GET['desc']) {
                 $desc = "DESC";
             }
-            $orderby = " ORDER BY " . mysqli_escape_string($GLOBALS['db'], $_GET['orderby']) . " $desc ";
+            $orderby = " ORDER BY " . mysqli_escape_string($db, $_GET['orderby']) . " $desc ";
         }
-        $clients = $GLOBALS['db']->query("SELECT * FROM 
+        $clients = $db->query("SELECT * FROM 
             clients_accounts, clients_locations
         WHERE 
             clients_accounts.id = clients_locations.account_id
@@ -271,7 +275,7 @@ class clients {
                     <div class='clearFix'></div>
                 </div>
                 <div class='col-xs-12 col-lg-5 col-md-5 col-sm-12'>
-                    ".$elements->usStyleAddress('canada')."
+                    " . $elements->usStyleAddress('canada') . "
                     <div class='clearFix'></div>
                 </div>
                 <button type='button' class='btn btn-primary addNewClient'>Add Client</button>

@@ -9,27 +9,28 @@ class traffic_cop extends modules {
     public $return = array();
 
     function __construct() {
+        extract($GLOBALS['CONFIG']);
         $this->section = @$_GET['section'];
         if (!isset($this->section)) {
             $this->section = 'index';
         } else if ($this->section == 'logoff') {
             setcookie("claymore_user", "", time() - 3600); //handle logoff
-            header("Location: {$GLOBALS['base_url']}/login");
+            header("Location: {$base_url}/login");
         }
 
         /*
          * Check Authentication Credentials
          */
 
-        if (!$this->check_id()) {
+        /*if (!$this->check_id()) {
             //GO TO JAIL!
             $this->return['template'] = 'login_template.html';
             return $this->return;
-        } else {
+        } else {*/
             //Good to go 
             $this->return['template'] = "{$this->section}_template.html";
-            setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $GLOBALS['auth_expire_time']);
-        }
+            setcookie("claymore_user", $_COOKIE['claymore_user'], time() + $auth_expire_time);
+        //}
         /*
          * Routing for modules
          */

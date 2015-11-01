@@ -7,14 +7,14 @@
  */
 class navigation extends modules {
 
-    public function nav() {
+    public function nav($CONFIG) {
         $mods_enabled_info = parent::enabled();
         $rs = '';
-        foreach($GLOBALS['db']->query("SELECT * FROM {$GLOBALS['db_table_prefix']}modules WHERE enabled=1 ORDER BY mod_nav_order") AS $en) {
-           //print_r($en);
+        foreach($CONFIG['db']->query("SELECT * FROM {$CONFIG['db_table_prefix']}modules WHERE enabled=1 ORDER BY mod_nav_order") AS $en) {
+           
             if (sizeof($mods_enabled_info[$en['mod_name']]['feature']) == 1) {
                 $rs .= "<li>
-                <a href='{$GLOBALS['base_url']}/" . strtolower($en['mod_name']) . "'>
+                <a href='{$CONFIG['base_url']}" . strtolower($en['mod_name']) . "'>
                     " . ucwords(str_replace('_', ' ', $en['mod_name'])) . "
                 </a></li>";
             } else {

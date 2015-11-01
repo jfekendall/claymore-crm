@@ -14,8 +14,8 @@ class template {
     private $template_file;
     private $template;
 
-    function __construct($template_file) {
-        $this->template_file = "./template/{$GLOBALS['template']}/$template_file";
+    function __construct($template_file, $CONFIG) {
+        $this->template_file = "./template/{$CONFIG['template']}/$template_file";
         if (file_exists($this->template_file)) {
             $this->template = file_get_contents($this->template_file);
         } else {

@@ -41,8 +41,8 @@ class mailer {
     
     function common(){
         if(!isset($this->sender) || !isset($this->password)){
-            $this->sender = $GLOBALS['smtp_default_sender'];
-            $this->password = $GLOBALS['smtp_default_password'];
+            $this->sender = $CONFIG['smtp_default_sender'];
+            $this->password = $CONFIG['smtp_default_password'];
         }
         $this->headers = array(
             'From' => "$this->sender_name <$this->sender>",
@@ -53,8 +53,8 @@ class mailer {
         $mime->setHTMLBody($this->content);
         $this->body = $mime->get();
         $this->headers = $mime->headers($this->headers);
-        $this->smtpinfo["host"] = $GLOBALS['smtp_server'];
-        $this->smtpinfo["port"] = $GLOBALS['smtp_port'];
+        $this->smtpinfo["host"] = $CONFIG['smtp_server'];
+        $this->smtpinfo["port"] = $CONFIG['smtp_port'];
         $this->smtpinfo["auth"] = true;
         $this->smtpinfo["username"] = "$this->sender";
         $this->smtpinfo["password"] = "$this->password";

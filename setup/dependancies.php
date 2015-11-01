@@ -5,6 +5,12 @@
  */
 class dependancies {
 
+    private $dir = '';
+
+    function __construct($base_dir) {
+        $this->dir = $base_dir;
+    }
+
     public function deps() {
         return array(
             "Config File Writable" => $this->config_writable(),
@@ -43,11 +49,11 @@ class dependancies {
     }
 
     public function config_writable() {
-        
-        if (is_writable("{$_SERVER['DOCUMENT_ROOT']}/config.php")) {
+
+        if (is_writable("{$this->dir}config.php")) {
             return true;
-        }else if(file_put_contents("{$_SERVER['DOCUMENT_ROOT']}/config.php" , "<?php\n\$GLOBALS = array();\n\$GLOBALS['errors']='';")){
-            chmod("{$_SERVER['DOCUMENT_ROOT']}/config.php", 0755);
+        } else if (file_put_contents("{$this->dir}config.php", " ")) {
+            chmod("{$this->dir}config.php", 0664);
             return true;
         }
         return false;
