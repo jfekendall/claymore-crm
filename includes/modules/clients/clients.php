@@ -277,7 +277,7 @@ class clients {
                     <div class='clearFix'></div>
                 </div>
                 <div class='col-xs-12 col-lg-5 col-md-5 col-sm-12'>
-                    " . $elements->usStyleAddress('canada') . "
+                    " . $elements->usStyleAddress('us') . "
                     <div class='clearFix'></div>
                 </div>
                 <button type='button' class='btn btn-primary addNewClient'>Add Client</button>

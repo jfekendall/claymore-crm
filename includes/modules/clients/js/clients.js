@@ -4,7 +4,7 @@ $(function() {
     });
     $('input[name=postal_code]').blur(function() {
         var correct = $.ajax({
-            url: this_location + "/includes/js/ajax/setCorrectCityState.php?zip=" + $(this).val(),
+            url: this_location +"/includes/js/ajax/setCorrectCityState.php?zip=" + $(this).val(),
             async: false
         }).responseText;
         if (correct) {

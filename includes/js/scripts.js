@@ -1,4 +1,4 @@
-var this_location = location.protocol + '//' + window.location.hostname
+var this_location = location.protocol + "//" + document.domain + "/" + location.pathname.split('/')[1] + "/";
 
 $(document).ready(function() {
     var height = ($(window).height() - 20);
