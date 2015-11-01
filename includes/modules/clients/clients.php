@@ -196,6 +196,7 @@ class clients {
     }
 
     private function intranetClientList() {
+        extract($GLOBALS['CONFIG']);
         if (!empty($_GET['orderby'])) {
             if ($_GET['desc']) {
                 $desc = "DESC";
@@ -227,11 +228,12 @@ class clients {
     }
 
     private function b2bClientList() {
+        extract($GLOBALS['CONFIG']);
         if (!empty($_GET['orderby'])) {
             if ($_GET['desc']) {
                 $desc = "DESC";
             }
-            $orderby = " ORDER BY " . mysqli_escape_string($db, $_GET['orderby']) . " $desc ";
+            //$orderby = " ORDER BY " . mysqli_escape_string($db, $_GET['orderby']) . " $desc ";
         }
         $clients = $db->query("SELECT * FROM 
             clients_accounts, clients_locations
