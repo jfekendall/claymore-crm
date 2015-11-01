@@ -2,8 +2,8 @@
 
 session_start();
 //UNCOMMENT FOR DEBUG
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
 
 $errors = $out = '';
 require_once("includes/classes/template.php");
@@ -58,8 +58,8 @@ if (!empty($CONFIG['errors'])) {
     $CONFIG['errors'] = "<div class='alert alert-danger'>{$CONFIG['errors']}</div>";
 }
 
-if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/template/{$CONFIG['template']}/{$verdict->return['template']}")) {
-    $out = new template($verdict->return['template']);
+if (file_exists("{$CONFIG['base_dir']}/template/{$CONFIG['template']}/{$verdict->return['template']}")) {
+    $out = new template($verdict->return['template'], $CONFIG);
 } else {
     $out = new template('index_template.html', $CONFIG);
 }
